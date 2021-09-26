@@ -41,7 +41,6 @@ globalThis.al_main = (function () {
     const l = al_main.load;
 
     globalThis.log("al_main.js: beginning load")
-
     l("al_util.js")
         .then(_ev => l("al_influx.js"))
         .then(_ev => l("al_deploy.js"))

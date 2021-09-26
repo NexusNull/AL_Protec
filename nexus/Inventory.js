@@ -1,15 +1,11 @@
-sleep = async function (num) {
-    return new Promise(function (resolve) {
-        setTimeout(resolve, num);
-    });
-};
+if(!module)
+    module = {};
 
-const Inventory = {
+module.exports = {
     swap: async function (a, b) {
-        var socket = parent.socket;
+        let socket = parent.socket;
         return new Promise(function (resolve, reject) {
-            console.log(a, b)
-            if (a == b)
+            if (a === b)
                 resolve();
 
             function onInvUpdate() {
@@ -46,7 +42,7 @@ const Inventory = {
             if (receiver.name) receiver = receiver.name;
 
             function response(data) {
-                if (data.response == "item_sent") {
+                if (data.response === "item_sent") {
                     socket.removeListener("game_response", response);
                     resolve(data);
                 }
@@ -65,7 +61,7 @@ const Inventory = {
             if (receiver.name) receiver = receiver.name;
 
             function response(data) {
-                if (data.response == "mail_sent") {
+                if (data.response === "mail_sent") {
                     socket.removeListener("game_response", response);
                     resolve(data);
                 }
@@ -88,6 +84,4 @@ const Inventory = {
 
     }
 };
-
-
 

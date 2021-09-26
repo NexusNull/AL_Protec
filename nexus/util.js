@@ -3,7 +3,9 @@ if(!module)
 
 
 module.exports = {
-    sleep: function () {
-
+    sleep: async function (num) {
+        return new Promise(function (resolve) {
+            setTimeout(resolve, num);
+        });
     }
 }

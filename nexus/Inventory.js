@@ -1,9 +1,12 @@
-if(!module)
-    module = {};
+sleep = async function (num) {
+    return new Promise(function (resolve) {
+        setTimeout(resolve, num);
+    });
+};
 
-module.exports = {
+const Inventory = {
     swap: async function (a, b) {
-        let socket = parent.socket;
+        const socket = parent.socket;
         return new Promise(function (resolve, reject) {
             if (a === b)
                 resolve();
@@ -81,7 +84,31 @@ module.exports = {
     },
 
     exchange: async function (num) {
+        const socket = parent.socket;
+        return new Promise(function (resolve, reject) {
+            if (typeof character.q.exchange !== "undefined")
+                return reject("Already Exchanging");
+            if (!character.items[num])
+                return reject("No Item present in slot " + num);
+            let state = 0;
 
+            function response(data) {
+                if (state === 0 && typeof data.q.exchange !== "undefined") {
+                    state++;
+                }
+                if (state === 1 && typeof data.q.exchange === "undefined") {
+                    socket.removeListener("player", response);
+                    resolve(data);
+                }
+            }
+
+            socket.on("player", response);
+            setTimeout(reject.bind(null, "exchange timed out"), 15000);
+
+            socket.emit("exchange", {item_num: num, q: "" + character.items[num].q});
+        });
     }
 };
+
+
 

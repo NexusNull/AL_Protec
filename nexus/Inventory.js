@@ -38,11 +38,12 @@ const Inventory = {
         return results;
     },
 
-    sendItem: async function (receiver, num) {
+    sendItem: async function (receiver, num, quantity) {
         const socket = parent.socket;
         return new Promise(function (resolve, reject) {
             if (!receiver) reject("missing receiver");
             if (receiver.name) receiver = receiver.name;
+            if (quantity === 0) return;
 
             function response(data) {
                 if (data.response === "item_sent") {

@@ -108,8 +108,37 @@ const Inventory = {
 
             socket.emit("exchange", {item_num: num, q: "" + character.items[num].q});
         });
+    },
+    /*
+    async listItemForSale(num, slot, q, price) {
+        const socket = parent.socket;
+        return new Promise(async (resolve, reject) => {
+
+            socket.emit("equip", {"q": "" + q, "slot": "" + slot, "num": "" + num, "price": "" + price});
+
+            function response(data) {
+                if (data.startsWith("Listed")) {
+                    socket.removeListener("game_response", response);
+                    resolve(data);
+                }
+            }
+            socket.on("game_log", response);
+        })
+    },*/
+    async fillStack(target, source) {
+        return new Promise(async (resolve, reject) => {
+            let targetItem = character.items[target]
+            let sourceItem = character.items[source];
+            if (!targetItem)
+                return reject("Missing target Item");
+            if (!sourceItem)
+                return reject("Missing source Item");
+            const stackSize = G.items[targetItem.name].s || 9999;
+
+            await this.swap(0, target);
+            await this.sendItem(character.id, source, stackSize - targetItem.q);
+            await this.swap(target, 0);
+
+        })
     }
 };
-
-
-

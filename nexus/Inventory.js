@@ -71,7 +71,7 @@ const Inventory = {
             }
 
             socket.on("game_response", response);
-            setTimeout(reject.bind(null, "mailItem timed out"), 1000);
+            setTimeout(reject.bind(null, "mailItem timed out"), 5000);
 
             socket.emit("mail", {"to": receiver, "subject": "Item", "message": "", item: 1});
         });
